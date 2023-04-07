@@ -1,0 +1,120 @@
+
+# Imports
+import pandas as pd
+from sqlalchemy import create_engine
+
+# This CSV doesn't have a header so pass
+# column names as an argument
+columns = [
+    "sepal_length",
+    "sepal_width",
+    "petal_length",
+    "petal_width",
+    "class"
+]
+
+# Load in the data
+df = pd.read_csv(
+    "C:/Users/admin/Desktop/iris.csv",
+    names=columns
+)
+
+# Instantiate sqlachemy.create_engine object
+engine = create_engine('postgresql://postgres:6309121028@localhost:5432/postgres')
+
+# Save the data from dataframe to
+# postgres table "iris_dataset"
+df.to_sql(
+    'iris_dataset', 
+    engine,
+    index=False # Not copying over the index
+)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+import pandas as pd
+# import csv
+import excel
+import psycopg2
+# Here 0th column will be extracted
+# df = pd.read_excel("sample.xlsx",
+#                    index_col=0)
+#
+import pandas as pd
+
+# Here 0th column will be extracted
+dynamic = pd.read_excel("C:/Users/admin/Downloads/Sample_Pivot_Table.xlsx")
+print(pd.DataFrame(dynamic))
+# import openpyxl
+#
+# Define variable to load the dataframe
+# dataframe = openpyxl.load_workbook("C:/Users/admin/Downloads/Sample_Pivot_Table.xlsx")
+
+# Define variable to read sheet
+# dataframe1 = dataframe.active
+
+# Iterate the loop to read the cell values
+# for row in range(0, dataframe1.max_row):
+#     for col in dataframe1.iter_cols(1, dataframe1.max_column):
+#         print(col[row].value)
+
+
+
+
+# open the csv file
+# with open(r"C:/Users/admin/Downloads/Sample_Pivot_Table.xlsx") as csv_file:
+#     # read the csv file
+#     csv_reader = csv.reader(csv_file, delimiter=',')
+#
+#     # now we can use this csv files into the pandas
+#     df = pd.DataFrame([csv_reader], index=None)
+#     df.head()
+# #
+# # iterating values of first column
+# for val in list(df[1]):
+#     print(val)
+
+
+
+
+import csv
+import psycopg2
+table_name = 'dynamic_table'
+file_name = 'dynamic'
+# a = open(file_name + '.csv','r')
+a = dynamic
+my_reader =csv.DictReader(a)
+print(my_reader.fieldnames)
+conn= psycopg2.connect(database="postgres",user="postgres",password='6309121028',host="localhost",port='5432')
+c= conn.cursor()
+
+insert_sql = 'select * from dynamic_table'
+print(insert_sql)
+values = []
+for row in my_reader:
+    row_values =[]
+    for field in my_reader.fieldnames:
+         row_values.append(row[field])
+    values.append(row_values)
+c.executemany(insert_sql, values)
+conn.commit()
+
+

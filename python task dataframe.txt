@@ -1,0 +1,97 @@
+import psycopg2
+import pandas as pd
+from Tools.scripts.dutree import display
+
+conn = psycopg2.connect(host="localhost",
+                        user="postgres",
+                        password="6309121028",
+                        database="postgres")
+cur = conn.cursor()
+#Setting auto commit false
+conn.autocommit = True
+#Creating a cursor object using the cursor() method
+cursor = conn.cursor()
+#Fetching all the rows before the update
+print("joined columns in company table: ")
+sql = '''SELECT *
+FROM student_details
+FULL OUTER JOIN student_marks
+ON student_details.sno = student_marks.sno;'''
+cursor.execute(sql)
+y=print(cursor.fetchall())
+
+sql = '''SELECT * FROM student_details'''
+cursor.execute(sql)
+a=cursor.fetchall()
+print(a)
+
+pql = '''SELECT * FROM student_marks'''
+cursor.execute(pql)
+b=cursor.fetchall()
+print(b)
+
+
+#Commit your changes in the database
+conn.commit()
+conn.close()
+x=pd.DataFrame(a)
+print(x)
+y=pd.DataFrame(b,columns = ["sno", "name", "subject","marks"])
+print(y)
+frames=[x,y]
+result = pd.concat(frames)
+print(result)
+
+
+y['perc'] =((y['marks'])/(y['marks'].sum()))*100
+print(y)
+
+
+
+
+
+
+
+
+
+
+
+create table student_details(sno int,name varchar,subject varchar)
+insert into student_details values(1,'omkar','science')
+insert into student_details values(2,'mohan','maths')
+insert into student_details values(3,'anil','physics');
+insert into student_details values(4,'praveena','biology');
+insert into student_details values(5,'lokesh','computers');
+insert into student_details values(6,'omkar','chemistry');
+select * from student_details
+
+create table student_marks(sno int,name varchar,subject varchar,marks int)
+insert into student_marks values(1,'omkar','science',99);
+insert into student_marks values(2,'mohan','maths',100);
+insert into student_marks values(3,'anil','physics',98);
+insert into student_marks values(4,'praveena','biology',99);
+insert into student_marks values(5,'lokesh','computers',87);
+insert into student_marks values(6,'omkar','chemistry',89);
+select * from student_marks
+
+
+
+
+
+
+
+
+
+
+create table stu details stu marks
+in sql
+jav omkar 510 
+510 marks hindi mathns 6 subs 6 marks
+only python
+only creation sql
+1. based on id join two tables
+2. percentage overla 6 members who have max percentage
+3.pandas through
+
+
+

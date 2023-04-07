@@ -1,0 +1,81 @@
+import psycopg2
+import pandas as pd
+from Tools.scripts.dutree import display
+
+conn = psycopg2.connect(host="localhost",
+                        user="postgres",
+                        password="6309121028",
+                        database="postgres")
+cur = conn.cursor()
+#Setting auto commit false
+conn.autocommit = True
+#Creating a cursor object using the cursor() method
+cursor = conn.cursor()
+#Fetching all the rows before the update
+print("creating two tables: ")
+sql = '''SELECT *
+FROM business'''
+cursor.execute(sql)
+a=cursor.fetchall()
+print(a)
+# y=print(cursor.fetchall())
+
+pql = '''SELECT * FROM awards'''
+cursor.execute(pql)
+b=cursor.fetchall()
+print(b)
+
+
+df = pd.DataFrame(a)
+print(df)
+
+
+
+sf=pd.DataFrame(b)
+print(sf)
+
+x=pd.read_sql(sql,conn)
+y=pd.read_sql(pql,conn)
+print(x)
+print(y)
+
+df=pd.merge(x,y,on='name',how='inner')
+print(df)
+
+
+import uuid
+# Printing random id using uuid1()
+print ("The random generated uuid is : ", uuid.uuid1())
+
+df['uuid']=df.index.to_series().map(lambda x: uuid.uuid4())
+print(df)
+
+
+
+
+
+
+# f = open("demofile.txt", "x")
+# print(f.read())
+
+# Importing the PIL library
+from PIL import Image
+from PIL import ImageDraw
+from PIL import ImageFont
+# Open an Image
+img = Image.open('C:/Users/admin/Desktop/car.png.png')
+
+# Call draw Method to add 2D graphics in an image
+I1 = ImageDraw.Draw(img)
+
+# Add Text to an image
+I1.text((10, 10), "nice Car", fill=(255, 0, 0))
+
+# Display edited image
+img.show()
+
+# Save the edited image
+img.save("car2.png")
+
+
+

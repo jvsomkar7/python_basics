@@ -1,0 +1,66 @@
+import pandas as pd
+import numpy as np
+employee_df={'emp_id':[101,102,103,104,105],
+            'emp_name':['mahesh','','ravi','','anil']}
+df=pd.DataFrame(employee_df)
+print(df)
+df['emp_name'] = np.where(df['emp_name']=='', 'no_emp_name',df['emp_name'])
+print(df)
+df['emp_name'] = np.where(df['emp_name'].notnull(),df['emp_name'],'no_emp_name')
+print(df)
+
+
+
+create table orders(sno int,purchase_id int,purchase_amount int,purchase_date timestamp,purchase_dept varchar)
+select * from orders
+
+create table films(code varchar, title varchar, did int, date_prod timestamp, kind varchar);
+INSERT INTO films (code, title, did, date_prod, kind)
+    VALUES ('T_601', 'Yojimbo', 106, '1961-06-16', 'Drama');
+select * from films
+
+
+import pandas as pd
+values= [['Rohan',455],['Elvish',250],['Deepak',495],
+         ['Soni',400],['Radhika',350],['Vansh',450]]
+df = pd.DataFrame(values, columns=['Name', 'Total_Marks'])
+df = df.assign(Percentage = lambda x: (x['Total_Marks'] /500 * 100))
+print(df)
+
+import pandas as pd
+import numpy as np
+data = pd.DataFrame({'values_attribute_type':['derieved_value','json','formula'],
+                     'values_attribute_value':['101', "{'A':'B'}",''],
+                     'value_attribute_formula':['','','a=b+c']
+                     })
+df = pd.DataFrame(data)
+print(df)
+df['cal_value']=df['values_attribute_value']+''+df['value_attribute_formula']
+print(df)
+df['cal_value']=df.apply(lambda x : x.values_attribute_value +''+x.value_attribute_formula,axis=1)
+print(df)
+
+
+
+
+
+
+
+
+import pandas as pd
+import psycopg2
+
+conn=psycopg2.connect(database="",user='postgres',password='6309121028',host='',port='5432')
+cur=conn.cursor()
+cur.execute("select * from purchase")
+df=pd.DataFrame(cur.fetchall(),columns =['item_id','customer_id','purchased_date'])
+df['purchased_date']= pd.to_datetime(df['purchased_date'], format = '%Y-%m-%d')
+print(df)
+sql1="INSERT INTO purchase_panda(item_id,customer_id,purchased_date) VALUES(%s,%s,%s)"
+cur.executemany(sql1, df.values.tolist())
+conn.commit()
+
+
+
+
+https://www.w3resource.com/python-exercises/pandas/joining-and-merging/index.php
