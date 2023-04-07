@@ -1,0 +1,41 @@
+import csv
+import psycopg2
+table_name = 'dynamic_table'
+file_name = 'dynamic'
+a = open(file_name + '.csv','r')
+
+my_reader =csv.DictReader(a)
+print(my_reader.fieldnames)
+conn= psycopg2.connect(database="postgres",user="postgres",password='6309121028',host="localhost",port='5432')
+c= conn.cursor()
+
+insert_sql = 'insert into ' + table_name + ' (' + ','.join(my_reader.fieldnames) + ') VALUES (' + ','.join(['%s'] * len(my_reader.fieldnames))+ ')'
+
+print(insert_sql)
+values = []
+for row in my_reader:
+    row_values =[]
+    for field in my_reader.fieldnames:
+         row_values.append(row[field])
+    values.append(row_values)
+c.executemany(insert_sql, values)
+conn.commit()
+
+
+
+
+
+
+dynamic.csv
+item_id,customer_id,purchased_date
+1,1,2022-06-16
+1,2,2022-06-16
+2,1,2022-06-19
+
+
+
+create table dynamic_table(item_id int,customer_id int,purchased_date timestamp);
+insert into dynamic_table values(1,1,'2022-05-03');
+select * from dynamic_table;
+delete from dynamic_table 
+where item_id = 1;
